@@ -8,7 +8,7 @@
    composer install
    ```
 
-3. Debe crear la base de datos **"jstec"** en su servidor de MYSQL
+3. Debe crear la base de datos **"jstec"** en su servidor de MYSQL y configurar la conexión con la misma en el fichero .env del proyecto
 
 4. Ejecute el siguiente comando para crear las tablas de la base de datos:
 
@@ -20,4 +20,10 @@
 
    ```bash
    php artisan db:seed
+   ```
+
+6. Ejecute el siguiente comando ejecutar todos los tests unitarios de la aplicación:
+
+   ```bash
+   php artisan test
    ```

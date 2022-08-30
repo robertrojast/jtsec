@@ -17,6 +17,8 @@ class CreateRolesUsuariosTable extends Migration
             $table->integer('id', true);
             $table->integer('id_usuario')->index('roles_usuarios_usuario_id');
             $table->integer('id_rol')->index('roles_usuarios_rol_id');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrentOnUpdate()->useCurrent();
         });
     }
 
