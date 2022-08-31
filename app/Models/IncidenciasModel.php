@@ -33,15 +33,6 @@ class IncidenciasModel extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | TABLES RELATIONSHIPS NAMES
-    |--------------------------------------------------------------------------
-    |
-    */
-
-    // const FIELD_RELATIONSHIP_FAMILIES = 'families';
-
-    /*
-    |--------------------------------------------------------------------------
     | ACCESORS
     |--------------------------------------------------------------------------
     |
@@ -93,12 +84,5 @@ class IncidenciasModel extends Model
     public function setUpdatedAtAttribute(String $value) {
         $this->attributes[self::FIELD_UPDATED_AT] = $value;
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELATIONSHIPS
-    |--------------------------------------------------------------------------
-    |
-    */
 
 }

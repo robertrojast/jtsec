@@ -33,15 +33,6 @@ class ActividadesModel extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | TABLES RELATIONSHIPS NAMES
-    |--------------------------------------------------------------------------
-    |
-    */
-
-    // const FIELD_RELATIONSHIP_FAMILIES = 'families';
-
-    /*
-    |--------------------------------------------------------------------------
     | ACCESORS
     |--------------------------------------------------------------------------
     |
@@ -93,12 +84,5 @@ class ActividadesModel extends Model
     public function setUpdatedAtAttribute(String $value) {
         $this->attributes[self::FIELD_UPDATED_AT] = $value;
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELATIONSHIPS
-    |--------------------------------------------------------------------------
-    |
-    */
 
 }

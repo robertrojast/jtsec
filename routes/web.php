@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::post('nueva-actividad/{id_proyecto}', [ActividadesController::class, 'NuevaActividad'])->name('nueva-actividad');
+Route::post('nueva-incidencia/{id_actividad}', [IncidenciasController::class, 'NuevaIncidencia'])->name('nueva-incidencia');
+
+Route::get('listado-actividades/{id_usuario}', [ActividadesController::class, 'ListadoActividades'])->name('listado-actividades');
+Route::get('listado-incidencias/{id_usuario}', [IncidenciasController::class, 'ListadoIncidencias'])->name('listado-incidencias');
+Route::get('listado-participantes/{id_proyecto}', [ProyectosController::class, 'ListadoParticipantes'])->name('listado-participantes');

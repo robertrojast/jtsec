@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\UsuariosModel;
+
 class RolesUsuariosModel extends Model
 {
     protected $table      = TABLA_ROLES_USUARIOS;
@@ -38,7 +40,7 @@ class RolesUsuariosModel extends Model
     |
     */
 
-    // const FIELD_RELATIONSHIP_FAMILIES = 'families';
+    const FIELD_RELATIONSHIP_USUARIOS = 'usuarios';
 
     /*
     |--------------------------------------------------------------------------
@@ -100,5 +102,9 @@ class RolesUsuariosModel extends Model
     |--------------------------------------------------------------------------
     |
     */
+
+    public function usuarios() {
+        return $this->hasMany(UsuariosModel::class, UsuariosModel::FIELD_ID, self::FIELD_ID_USUARIO);
+    }
 
 }
