@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\RolesUsuariosModel;
 use App\Models\UsuariosProyectosModel;
 use App\Models\UsuariosActividadesModel;
 use App\Models\UsuariosIncidenciasModel;
@@ -52,7 +51,6 @@ class UsuariosModel extends Model
     |
     */
 
-    const FIELD_RELATIONSHIP_ROLES       = 'roles';
     const FIELD_RELATIONSHIP_PROYECTOS   = 'proyectos';
     const FIELD_RELATIONSHIP_ACTIVIDADES = 'actividades';
     const FIELD_RELATIONSHIP_INCIDENCIAS = 'incidencias';
@@ -109,10 +107,6 @@ class UsuariosModel extends Model
     |--------------------------------------------------------------------------
     |
     */
-
-    public function roles() {
-        return $this->hasMany(RolesUsuariosModel::class, RolesUsuariosModel::FIELD_ID_USUARIO, self::FIELD_ID);
-    }
 
     public function proyectos() {
         return $this->hasMany(UsuariosProyectosModel::class, UsuariosProyectosModel::FIELD_ID_USUARIO, self::FIELD_ID);

@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\QueryException;
 
 use App\Http\Requests\ActividadesPostRequest;
+use App\Http\Requests\NuevoUsuarioActividadPostRequest;
 
 use App\Helpers\HelperResponse;
 
@@ -22,6 +23,28 @@ class ActividadesController extends Controller {
     public function NuevaActividad(ActividadesPostRequest $request) : object {
         try{
             ActividadesRepository::NuevaActividad($request);
+
+            return HelperResponse::returnJson(TRUE, __('master.logOperationFinished'), __('master.logRegisterCreated'));
+        }
+        catch(QueryException $e) {
+            return HelperResponse::returnJson(FALSE, __('master.logOperationError'), $e->getMessage());
+        }
+        catch(Exception $e) {
+            $errorMessage = $e->getFile()." (line ".$e->getLine()."): ".$e->getMessage();
+
+            return HelperResponse::returnJson(FALSE, __('master.logOperationError'), $errorMessage);
+        }
+    }
+
+    /**
+     * Asigna un usuario a la actividad especificada. Si ya estaba asignado, se actualiza su configuración (vía POST)
+     *
+     * @param NuevoUsuarioActividadPostRequest $request
+     * @return object   Retorna un json con el estado de la operación.
+     */
+    public static function NuevoUsuarioActividad(NuevoUsuarioActividadPostRequest $request) : object {
+        try{
+            ActividadesRepository::NuevoUsuarioActividad($request);
 
             return HelperResponse::returnJson(TRUE, __('master.logOperationFinished'), __('master.logRegisterCreated'));
         }

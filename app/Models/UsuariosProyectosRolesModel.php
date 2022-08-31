@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\UsuariosModel;
 
-class RolesUsuariosModel extends Model
+class UsuariosProyectosRolesModel extends Model
 {
-    protected $table      = TABLA_ROLES_USUARIOS;
+    protected $table      = TABLA_ROLES_USUARIOS_PROYECTOS_ROLES;
     protected $primaryKey = self::FIELD_ID;
 
     /**
@@ -27,11 +27,12 @@ class RolesUsuariosModel extends Model
     |
     */
 
-    const FIELD_ID         = 'id';
-    const FIELD_ID_USUARIO = 'id_usuario';
-    const FIELD_ID_ROL     = 'id_rol';
-    const FIELD_CREATED_AT = 'created_at';
-    const FIELD_UPDATED_AT = 'updated_at';
+    const FIELD_ID          = 'id';
+    const FIELD_ID_USUARIO  = 'id_usuario';
+    const FIELD_ID_ROL      = 'id_rol';
+    const FIELD_ID_PROYECTO = 'id_proyecto';
+    const FIELD_CREATED_AT  = 'created_at';
+    const FIELD_UPDATED_AT  = 'updated_at';
 
     /*
     |--------------------------------------------------------------------------
@@ -61,6 +62,10 @@ class RolesUsuariosModel extends Model
         return (Int) $this->attributes[self::FIELD_ID_ROL];
     }
 
+    public function getIdProyectoAttribute() : Int {
+        return (Int) $this->attributes[self::FIELD_ID_PROYECTO];
+    }
+
     public function getCreatedAtAttribute() : String {
         return (String) $this->attributes[self::FIELD_CREATED_AT];
     }
@@ -86,6 +91,10 @@ class RolesUsuariosModel extends Model
 
     public function setIdRolAttribute(Int $value) {
         $this->attributes[self::FIELD_ID_ROL] = $value;
+    }
+
+    public function setIdProyectoAttribute(Int $value) {
+        $this->attributes[self::FIELD_ID_PROYECTO] = $value;
     }
 
     public function setCreatedAtAttribute(String $value) {
