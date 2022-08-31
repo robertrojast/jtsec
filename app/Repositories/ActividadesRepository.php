@@ -7,6 +7,8 @@
     use App\Models\ActividadesModel;
     use App\Models\UsuariosActividadesModel;
 
+    use App\Repositories\ProyectosRepository;
+
     class ActividadesRepository extends Repository {
 
         /**
@@ -39,6 +41,7 @@
 
         /**
          * Asigna un usuario a una actividad. Si ya está asignado, se actualiza su configuración.
+         * Solo puede ser asignado si el usuario tiene el rol "participante" en el proyecto al que pertenece la actividad
          *
          * @param Object $request       Valores de los campos del formulario
          * @return Bool
@@ -48,6 +51,14 @@
             $id_usuario   = $data[FORM_FIELD_ID_USUARIO];
             $id_actividad = $data[FORM_FIELD_ID_ACTIVIDAD];
             $id_rol       = $data[FORM_FIELD_ID_ROL];
+
+            // Obtenemos el id_proyecto de la actividad
+            $actividad   = ActividadesModel::where(ActividadesModel::FIELD_ID, $id_actividad)->first();
+            $id_proyecto = $actividad->{ ActividadesModel::FIELD_ID_PROYECTO };
+
+            if(!ProyectosRepository::usuarioEsParticipanteEnProyecto($id_usuario, $id_proyecto)) {
+                return FALSE;
+            }
 
             // Comprobamos si el usuario ya está asignado a la actividad especificada
             $usuario_actividad = UsuariosActividadesModel::where(UsuariosActividadesModel::FIELD_ID_USUARIO, $id_usuario)

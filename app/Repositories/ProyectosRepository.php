@@ -8,6 +8,7 @@
 
     use App\Models\UsuariosProyectosModel;
     use App\Models\UsuariosProyectosRolesModel;
+    use App\Models\RolesModel;
 
     class ProyectosRepository extends Repository {
 
@@ -92,5 +93,21 @@
             });
 
             return TRUE;
+        }
+
+        /**
+         * Comprueba si el usuario en cuestión tiene el rol "participante" asignado en el proyecto
+         * 
+         * @param Int $id_usuario
+         * @param Int $id_proyecto
+         * @return Bool
+         */
+        public static function usuarioEsParticipanteEnProyecto(Int $id_usuario, Int $id_proyecto) : Bool {
+            $es_participante = UsuariosProyectosRolesModel::where(UsuariosProyectosRolesModel::FIELD_ID_PROYECTO, $id_proyecto)
+                ->where(UsuariosProyectosRolesModel::FIELD_ID_USUARIO, $id_usuario)
+                ->where(UsuariosProyectosRolesModel::FIELD_ID_ROL, RolesModel::ID_ROL_PARTICIPANTE)
+                ->count();
+
+            return (Bool) $es_participante;
         }
     }

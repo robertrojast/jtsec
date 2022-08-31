@@ -44,9 +44,14 @@ class ActividadesController extends Controller {
      */
     public static function NuevoUsuarioActividad(NuevoUsuarioActividadPostRequest $request) : object {
         try{
-            ActividadesRepository::NuevoUsuarioActividad($request);
+            $asignado = ActividadesRepository::NuevoUsuarioActividad($request);
 
-            return HelperResponse::returnJson(TRUE, __('master.logOperationFinished'), __('master.logRegisterCreated'));
+            if($asignado) {
+                return HelperResponse::returnJson(TRUE, __('master.logOperationFinished'), __('master.logRegisterCreated'));
+            }
+            else {
+                return HelperResponse::returnJson(FALSE, __('master.logOperationError'), 'No se ha podido asignar el usuario a la actividad, ya que éste no es "participante" en el proyecto al que pertenece.');
+            }
         }
         catch(QueryException $e) {
             return HelperResponse::returnJson(FALSE, __('master.logOperationError'), $e->getMessage());
