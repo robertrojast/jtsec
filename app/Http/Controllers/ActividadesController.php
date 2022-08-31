@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\DB;
+
+use App\Http\Requests\ActividadesPostRequest;
 
 use App\Helpers\HelperResponse;
 
@@ -12,9 +13,15 @@ use App\Repositories\ActividadesRepository;
 
 class ActividadesController extends Controller {
 
-    public function NuevaActividad(Int $id_proyecto) {
+    /**
+     * Crea una nueva actividad y se la asigna al proyecto especificado (vía POST).
+     *
+     * @param ActividadesPostRequest $request
+     * @return object   Retorna un json con el estado de la operación.
+     */
+    public function NuevaActividad(ActividadesPostRequest $request) : object {
         try{
-            $promotion_id = ActividadesRepository::nuevaActividad($request, $promotion_id);
+            ActividadesRepository::NuevaActividad($request);
 
             return HelperResponse::returnJson(TRUE, __('master.logOperationFinished'), __('master.logRegisterCreated'));
         }

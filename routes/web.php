@@ -15,8 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('nueva-actividad/{id_proyecto}', [ActividadesController::class, 'NuevaActividad'])->name('nueva-actividad');
-Route::post('nueva-incidencia/{id_actividad}', [IncidenciasController::class, 'NuevaIncidencia'])->name('nueva-incidencia');
+Route::post('nueva-actividad', [ActividadesController::class, 'NuevaActividad'])->name('nueva-actividad');
+Route::post('nueva-incidencia', [IncidenciasController::class, 'NuevaIncidencia'])->name('nueva-incidencia');
+
+Route::post('nuevo-usuario-proyecto', [ProyectosController::class, 'NuevoUsuarioProyecto'])->name('nuevo-usuario-proyecto');
+Route::post('nuevo-usuario-actividad', [ActividadesController::class, 'NuevoUsuarioActividad'])->name('nuevo-usuario-actividad');
+Route::post('nuevo-usuario-incidencia', [IncidenciasController::class, 'NuevoUsuarioIncidencia'])->name('nuevo-usuario-incidencia');
 
 Route::get('listado-actividades/{id_usuario}', [ActividadesController::class, 'ListadoActividades'])->name('listado-actividades');
 Route::get('listado-incidencias/{id_usuario}', [IncidenciasController::class, 'ListadoIncidencias'])->name('listado-incidencias');

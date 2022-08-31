@@ -30,6 +30,7 @@ class UsuariosActividadesModel extends Model
     const FIELD_ID           = 'id';
     const FIELD_ID_USUARIO   = 'id_usuario';
     const FIELD_ID_ACTIVIDAD = 'id_actividad';
+    const FIELD_ID_ROL       = 'id_rol';
     const FIELD_CREATED_AT   = 'created_at';
     const FIELD_UPDATED_AT   = 'updated_at';
 
@@ -61,6 +62,10 @@ class UsuariosActividadesModel extends Model
         return (Int) $this->attributes[self::FIELD_ID_ACTIVIDAD];
     }
 
+    public function getIdRolAttribute() : Int {
+        return (Int) $this->attributes[self::FIELD_ID_ROL];
+    }
+
     public function getCreatedAtAttribute() : String {
         return (String) $this->attributes[self::FIELD_CREATED_AT];
     }
@@ -86,6 +91,10 @@ class UsuariosActividadesModel extends Model
 
     public function setIdActividadAttribute(Int $value) {
         $this->attributes[self::FIELD_ID_ACTIVIDAD] = $value;
+    }
+
+    public function setIdRolAttribute(Int $value) {
+        $this->attributes[self::FIELD_ID_ROL] = $value;
     }
 
     public function setCreatedAtAttribute(String $value) {

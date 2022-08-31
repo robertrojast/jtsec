@@ -17,6 +17,7 @@ class CreateUsuariosActividadesTable extends Migration
             $table->integer('id', true);
             $table->integer('id_usuario')->index('ua_id_usuario');
             $table->integer('id_actividad')->index('ua_id_actividad');
+            $table->integer('id_rol')->index('ua_id_rol');
             $table->timestamps();
         });
     }
