@@ -4,7 +4,10 @@
 
     use App\Repositories\Repository;
 
+    use Illuminate\Support\Facades\DB;
+
     use App\Models\UsuariosProyectosModel;
+    use App\Models\UsuariosProyectosRolesModel;
 
     class ProyectosRepository extends Repository {
 
@@ -24,27 +27,70 @@
         }
 
         /**
-         * Asigna un nuevo usuario al proyecto especificado (si ya estaba asignado, no hace nada)
+         * Quita todos los roles que tenga asignado el usuario en el proyecto
+         *
+         * @param Int $id_usuario
+         * @param Int $id_proyecto
+         * @return Bool
+         */
+        public static function quitarRolesProyectoUsuario(Int $id_usuario, Int $id_proyecto) : Bool {
+            return UsuariosProyectosRolesModel::where(UsuariosProyectosRolesModel::FIELD_ID_USUARIO, $id_usuario)
+                ->where(UsuariosProyectosRolesModel::FIELD_ID_PROYECTO, $id_proyecto)
+                ->delete();
+        }
+
+        /**
+         * Añade los roles que tenga el usuario dentro del proyecto especificado.
+         *
+         * @param Int $id_usuario
+         * @param Int $id_proyecto
+         * @param Array $roles_ids
+         * @return Bool
+         */
+        public static function insertarRolesProyectoUsuario(Int $id_usuario, Int $id_proyecto, Array $roles_ids) : Bool {
+            // Quitamos roles anteriores que tenga asignado el usuario en el proyecto.
+            self::quitarRolesProyectoUsuario($id_usuario, $id_proyecto);
+
+            foreach($roles_ids AS $id_rol) {
+                $rol = new UsuariosProyectosRolesModel();
+
+                $rol->{ UsuariosProyectosRolesModel::FIELD_ID_ROL }      = $id_rol;
+                $rol->{ UsuariosProyectosRolesModel::FIELD_ID_USUARIO }  = $id_usuario;
+                $rol->{ UsuariosProyectosRolesModel::FIELD_ID_PROYECTO } = $id_proyecto;
+
+                $rol->save();
+            }
+
+            return TRUE;
+        }
+
+        /**
+         * Asigna un nuevo usuario al proyecto especificado
          *
          * @param object $request
          * @return Bool
          */
         public static function NuevoUsuarioProyecto(object $request) : Bool {
-            $data        = $request->all();
-            $id_proyecto = $data[FORM_FIELD_ID_PROYECTO];
-            $id_usuario  = $data[FORM_FIELD_ID_USUARIO];
+            DB::transaction(function() use ($request) {
+                $data        = $request->all();
+                $id_proyecto = $data[FORM_FIELD_ID_PROYECTO];
+                $id_usuario  = $data[FORM_FIELD_ID_USUARIO];
+                $roles_ids   = $data[FORM_FIELD_IDS_ROLES];
 
-            // START - Si el usuario ya está asignado al proyecto
-            if(self::usuarioAsignado($id_usuario, $id_proyecto)) {
-                return TRUE;
-            }
-            // END - Si el usuario ya está asignado al proyecto
+                // START - Si el usuario NO está asignado al proyecto
+                if(!self::usuarioAsignado($id_usuario, $id_proyecto)) {
+                    // Añadimos el usuario al proyecto
+                    $usuario = new UsuariosProyectosModel();
+                    $usuario->{ UsuariosProyectosModel::FIELD_ID_PROYECTO } = $id_proyecto;
+                    $usuario->{ UsuariosProyectosModel::FIELD_ID_USUARIO }  = $id_usuario;
+                    $usuario->save();
+                }
+                // END - Si el usuario NO está asignado al proyecto
 
-            // Añadimos el usuario al proyecto
-            $usuario = new UsuariosProyectosModel();
-            $usuario->{ UsuariosProyectosModel::FIELD_ID_PROYECTO } = $id_proyecto;
-            $usuario->{ UsuariosProyectosModel::FIELD_ID_USUARIO }  = $id_usuario;
+                // AÑADIMOS LOS ROLES DEL USUARIO AL PROYECTO
+                self::insertarRolesProyectoUsuario($id_usuario, $id_proyecto, $roles_ids);
+            });
 
-            return $usuario->save();
+            return TRUE;
         }
     }

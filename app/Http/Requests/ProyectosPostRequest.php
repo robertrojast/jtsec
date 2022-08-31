@@ -26,6 +26,7 @@ class ProyectosPostRequest extends FormRequest
         return [
             FORM_FIELD_ID_PROYECTO => 'required',
             FORM_FIELD_ID_USUARIO  => 'required',
+            FORM_FIELD_IDS_ROLES   => 'required',
         ];
     }
 }
