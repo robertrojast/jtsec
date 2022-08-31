@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\QueryException;
 
 use App\Http\Requests\IncidenciasPostRequest;
+use App\Http\Requests\NuevoUsuarioIncidenciaPostRequest;
 
 use App\Helpers\HelperResponse;
 
@@ -22,6 +23,28 @@ class IncidenciasController extends Controller {
     public function NuevaIncidencia(IncidenciasPostRequest $request) : object {
         try{
             IncidenciasRepository::NuevaIncidencia($request);
+
+            return HelperResponse::returnJson(TRUE, __('master.logOperationFinished'), __('master.logRegisterCreated'));
+        }
+        catch(QueryException $e) {
+            return HelperResponse::returnJson(FALSE, __('master.logOperationError'), $e->getMessage());
+        }
+        catch(Exception $e) {
+            $errorMessage = $e->getFile()." (line ".$e->getLine()."): ".$e->getMessage();
+
+            return HelperResponse::returnJson(FALSE, __('master.logOperationError'), $errorMessage);
+        }
+    }
+
+    /**
+     * Añade un usuario a una incidencia
+     *
+     * @param NuevoUsuarioIncidenciaPostRequest $request
+     * @return object
+     */
+    public function NuevoUsuarioIncidencia(NuevoUsuarioIncidenciaPostRequest $request) : object {
+        try{
+            IncidenciasRepository::NuevoUsuarioIncidencia($request);
 
             return HelperResponse::returnJson(TRUE, __('master.logOperationFinished'), __('master.logRegisterCreated'));
         }
