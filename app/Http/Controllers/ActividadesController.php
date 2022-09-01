@@ -24,15 +24,15 @@ class ActividadesController extends Controller {
         try{
             ActividadesRepository::NuevaActividad($request);
 
-            return HelperResponse::returnJson(TRUE, __('master.logOperationFinished'), __('master.logRegisterCreated'));
+            return HelperResponse::JsonRequestStatus(TRUE, __('master.logOperationFinished'), __('master.logRegisterCreated'));
         }
         catch(QueryException $e) {
-            return HelperResponse::returnJson(FALSE, __('master.logOperationError'), $e->getMessage());
+            return HelperResponse::JsonRequestStatus(FALSE, __('master.logOperationError'), $e->getMessage());
         }
         catch(Exception $e) {
             $errorMessage = $e->getFile()." (line ".$e->getLine()."): ".$e->getMessage();
 
-            return HelperResponse::returnJson(FALSE, __('master.logOperationError'), $errorMessage);
+            return HelperResponse::JsonRequestStatus(FALSE, __('master.logOperationError'), $errorMessage);
         }
     }
 
@@ -47,24 +47,42 @@ class ActividadesController extends Controller {
             $asignado = ActividadesRepository::NuevoUsuarioActividad($request);
 
             if($asignado) {
-                return HelperResponse::returnJson(TRUE, __('master.logOperationFinished'), __('master.logRegisterCreated'));
+                return HelperResponse::JsonRequestStatus(TRUE, __('master.logOperationFinished'), __('master.logRegisterCreated'));
             }
             else {
-                return HelperResponse::returnJson(FALSE, __('master.logOperationError'), 'No se ha podido asignar el usuario a la actividad, ya que éste no es "participante" en el proyecto al que pertenece.');
+                return HelperResponse::JsonRequestStatus(FALSE, __('master.logOperationError'), 'No se ha podido asignar el usuario a la actividad, ya que éste no es "participante" en el proyecto al que pertenece.');
             }
         }
         catch(QueryException $e) {
-            return HelperResponse::returnJson(FALSE, __('master.logOperationError'), $e->getMessage());
+            return HelperResponse::JsonRequestStatus(FALSE, __('master.logOperationError'), $e->getMessage());
         }
         catch(Exception $e) {
             $errorMessage = $e->getFile()." (line ".$e->getLine()."): ".$e->getMessage();
 
-            return HelperResponse::returnJson(FALSE, __('master.logOperationError'), $errorMessage);
+            return HelperResponse::JsonRequestStatus(FALSE, __('master.logOperationError'), $errorMessage);
         }
     }
 
-    public function ListadoActividades(Int $id_usuario) {
+    /**
+     * Obtiene el listado de actividades del usuario especificado.
+     *
+     * @param Int $id_usuario
+     * @return object
+     */
+    public function ListadoActividades(Int $id_usuario) : object {
+        try{
+            $actividades_usuario = ActividadesRepository::ListadoActividadesUsuario($id_usuario);
 
+            return HelperResponse::JsonRequestFromCollection($actividades_usuario);
+        }
+        catch(QueryException $e) {
+            return HelperResponse::JsonRequestStatus(FALSE, __('master.logOperationError'), $e->getMessage());
+        }
+        catch(Exception $e) {
+            $errorMessage = $e->getFile()." (line ".$e->getLine()."): ".$e->getMessage();
+
+            return HelperResponse::JsonRequestStatus(FALSE, __('master.logOperationError'), $errorMessage);
+        }
     }
 
 }

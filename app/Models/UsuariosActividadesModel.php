@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\UsuariosModel;
+use App\Models\ActividadesModel;
 
 class UsuariosActividadesModel extends Model
 {
@@ -41,7 +42,8 @@ class UsuariosActividadesModel extends Model
     |
     */
 
-    const FIELD_RELATIONSHIP_USUARIOS = 'usuarios';
+    const FIELD_RELATIONSHIP_USUARIOS    = 'usuarios';
+    const FIELD_RELATIONSHIP_ACTIVIDADES = 'actividades';
 
     /*
     |--------------------------------------------------------------------------
@@ -114,5 +116,9 @@ class UsuariosActividadesModel extends Model
 
     public function usuarios() {
         return $this->hasMany(UsuariosModel::class, UsuariosModel::FIELD_ID, self::FIELD_ID_USUARIO);
+    }
+
+    public function actividades() {
+        return $this->hasMany(ActividadesModel::class, ActividadesModel::FIELD_ID, self::FIELD_ID_ACTIVIDAD);
     }
 }

@@ -23,15 +23,15 @@ class ProyectosController extends Controller {
         try{
             ProyectosRepository::NuevoUsuarioProyecto($request);
 
-            return HelperResponse::returnJson(TRUE, __('master.logOperationFinished'), __('master.logRegisterCreated'));
+            return HelperResponse::JsonRequestStatus(TRUE, __('master.logOperationFinished'), __('master.logRegisterCreated'));
         }
         catch(QueryException $e) {
-            return HelperResponse::returnJson(FALSE, __('master.logOperationError'), $e->getMessage());
+            return HelperResponse::JsonRequestStatus(FALSE, __('master.logOperationError'), $e->getMessage());
         }
         catch(Exception $e) {
             $errorMessage = $e->getFile()." (line ".$e->getLine()."): ".$e->getMessage();
 
-            return HelperResponse::returnJson(FALSE, __('master.logOperationError'), $errorMessage);
+            return HelperResponse::JsonRequestStatus(FALSE, __('master.logOperationError'), $errorMessage);
         }
     }
 

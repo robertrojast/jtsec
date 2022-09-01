@@ -3,7 +3,9 @@
     namespace App\Repositories;
 
     use App\Repositories\Repository;
+    use Illuminate\Database\Eloquent\Collection;
 
+    use App\Models\UsuariosModel;
     use App\Models\ActividadesModel;
     use App\Models\UsuariosActividadesModel;
 
@@ -78,5 +80,20 @@
             // END - Insertamos la configuración de la actividad
 
             return $usuario_actividad->save();
+        }
+
+        /**
+         * Obtiene el listado de actividades del usuario especificado.
+         *
+         * @param Int $id_usuario
+         * @return object
+         */
+        public static function ListadoActividadesUsuario(Int $id_usuario) : Collection {
+            $usuario             = UsuariosModel::where(UsuariosModel::FIELD_ID, $id_usuario)->first();
+
+            $usuario_actividades = $usuario->{ UsuariosModel::FIELD_RELATIONSHIP_ACTIVIDADES }
+                ->{ UsuariosActividadesModel::FIELD_RELATIONSHIP_ACTIVIDADES };
+
+            return $usuario_actividades;
         }
     }
