@@ -13,20 +13,19 @@ class CrearActividadEnProyectoTest extends TestCase
      *
      * @return void
      */
-    public function test_crear_actividad_en_proyecto_1()
-    {
+    public function test_crear_actividad_en_proyecto_1() {
         $fecha_actual     = date('d-m-Y H:i', time());
         $nombre_actividad = 'ACTIVIDAD ('.$fecha_actual.')';
+        $postFormUrl      = route('nueva-actividad');
 
-        $nueva_actividad = new ActividadesModel();
-        $nueva_actividad->{ ActividadesModel::FIELD_NOMBRE }      = $nombre_actividad;
-        $nueva_actividad->{ ActividadesModel::FIELD_ID_PROYECTO } = 1;
-        $nueva_actividad->save();
-
-        $nueva_actividad_id = $nueva_actividad->id;
+        $this->call('POST', $postFormUrl, [
+            FORM_FIELD_ID_PROYECTO      => 1,
+            FORM_FIELD_NOMBRE_ACTIVIDAD => $nombre_actividad,
+            '_token'                    => csrf_token()
+        ]);
 
         $this->assertDatabaseHas(TABLA_ACTIVIDADES, [
-            ActividadesModel::FIELD_ID => $nueva_actividad_id,
+            ActividadesModel::FIELD_NOMBRE => $nombre_actividad,
         ]);
     }
 }

@@ -22,16 +22,16 @@ class CrearIncidenciaEnUltimaActividadTest extends TestCase
 
         $fecha_actual      = date('d-m-Y H:i', time());
         $nombre_incidencia = 'INCIDENCIA ('.$fecha_actual.')';
+        $postFormUrl       = route('nueva-incidencia');
 
-        $nueva_incidencia = new IncidenciasModel();
-        $nueva_incidencia->{ IncidenciasModel::FIELD_ID_ACTIVIDAD } = $id_actividad;
-        $nueva_incidencia->{ IncidenciasModel::FIELD_NOMBRE }       = $nombre_incidencia;
-        $nueva_incidencia->save();
-
-        $nueva_incidencia_id = $nueva_incidencia->id;
+        $this->call('POST', $postFormUrl, [
+            FORM_FIELD_ID_ACTIVIDAD      => $id_actividad,
+            FORM_FIELD_NOMBRE_INCIDENCIA => $nombre_incidencia,
+            '_token'                     => csrf_token()
+        ]);
 
         $this->assertDatabaseHas(TABLA_INCIDENCIAS, [
-            IncidenciasModel::FIELD_ID => $nueva_incidencia_id,
+            IncidenciasModel::FIELD_NOMBRE => $nombre_incidencia,
         ]);
     }
 }
