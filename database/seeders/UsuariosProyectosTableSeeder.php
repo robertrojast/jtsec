@@ -6,10 +6,10 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\UsuariosModel;
-use App\Models\UsuariosProyectosRolesModel;
+use App\Models\UsuariosProyectosModel;
 use App\Models\RolesModel;
 
-class UsuariosProyectosRolesTableSeeder extends Seeder
+class UsuariosProyectosTableSeeder extends Seeder
 {
 
     /**
@@ -47,9 +47,9 @@ class UsuariosProyectosRolesTableSeeder extends Seeder
     {
         DB::statement("SET foreign_key_checks = 0");
 
-        UsuariosProyectosRolesModel::truncate();
+        UsuariosProyectosModel::truncate();
 
-        UsuariosProyectosRolesModel::insert(self::TABLE_ROWS);
+        UsuariosProyectosModel::insert(self::TABLE_ROWS);
 
         DB::statement("SET foreign_key_checks = 1");
     }

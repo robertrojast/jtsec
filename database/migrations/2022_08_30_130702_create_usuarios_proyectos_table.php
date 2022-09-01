@@ -15,8 +15,9 @@ class CreateUsuariosProyectosTable extends Migration
     {
         Schema::create('usuarios_proyectos', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->integer('id_usuario')->index('up_id_usuario');
-            $table->integer('id_proyecto')->index('up_id_proyecto');
+            $table->integer('id_usuario')->index('upr_id_usuario');
+            $table->integer('id_rol')->index('upr_id_rol');
+            $table->integer('id_proyecto')->index('upr_id_proyecto');
             $table->timestamps();
         });
     }

@@ -9,7 +9,6 @@
 
     use App\Models\ProyectosModel;
     use App\Models\UsuariosProyectosModel;
-    use App\Models\UsuariosProyectosRolesModel;
     use App\Models\RolesModel;
 
     class ProyectosRepository extends Repository {
@@ -37,8 +36,8 @@
          * @return Bool
          */
         public static function quitarRolesProyectoUsuario(Int $id_usuario, Int $id_proyecto) : Bool {
-            return UsuariosProyectosRolesModel::where(UsuariosProyectosRolesModel::FIELD_ID_USUARIO, $id_usuario)
-                ->where(UsuariosProyectosRolesModel::FIELD_ID_PROYECTO, $id_proyecto)
+            return UsuariosProyectosModel::where(UsuariosProyectosModel::FIELD_ID_USUARIO, $id_usuario)
+                ->where(UsuariosProyectosModel::FIELD_ID_PROYECTO, $id_proyecto)
                 ->delete();
         }
 
@@ -55,11 +54,11 @@
             self::quitarRolesProyectoUsuario($id_usuario, $id_proyecto);
 
             foreach($roles_ids AS $id_rol) {
-                $rol = new UsuariosProyectosRolesModel();
+                $rol = new UsuariosProyectosModel();
 
-                $rol->{ UsuariosProyectosRolesModel::FIELD_ID_ROL }      = $id_rol;
-                $rol->{ UsuariosProyectosRolesModel::FIELD_ID_USUARIO }  = $id_usuario;
-                $rol->{ UsuariosProyectosRolesModel::FIELD_ID_PROYECTO } = $id_proyecto;
+                $rol->{ UsuariosProyectosModel::FIELD_ID_ROL }      = $id_rol;
+                $rol->{ UsuariosProyectosModel::FIELD_ID_USUARIO }  = $id_usuario;
+                $rol->{ UsuariosProyectosModel::FIELD_ID_PROYECTO } = $id_proyecto;
 
                 $rol->save();
             }
@@ -105,9 +104,9 @@
          * @return Bool
          */
         public static function usuarioEsParticipanteEnProyecto(Int $id_usuario, Int $id_proyecto) : Bool {
-            $es_participante = UsuariosProyectosRolesModel::where(UsuariosProyectosRolesModel::FIELD_ID_PROYECTO, $id_proyecto)
-                ->where(UsuariosProyectosRolesModel::FIELD_ID_USUARIO, $id_usuario)
-                ->where(UsuariosProyectosRolesModel::FIELD_ID_ROL, RolesModel::ID_ROL_PARTICIPANTE)
+            $es_participante = UsuariosProyectosModel::where(UsuariosProyectosModel::FIELD_ID_PROYECTO, $id_proyecto)
+                ->where(UsuariosProyectosModel::FIELD_ID_USUARIO, $id_usuario)
+                ->where(UsuariosProyectosModel::FIELD_ID_ROL, RolesModel::ID_ROL_PARTICIPANTE)
                 ->count();
 
             return (Bool) $es_participante;

@@ -29,6 +29,7 @@ class UsuariosProyectosModel extends Model
 
     const FIELD_ID          = 'id';
     const FIELD_ID_USUARIO  = 'id_usuario';
+    const FIELD_ID_ROL      = 'id_rol';
     const FIELD_ID_PROYECTO = 'id_proyecto';
     const FIELD_CREATED_AT  = 'created_at';
     const FIELD_UPDATED_AT  = 'updated_at';
@@ -55,6 +56,10 @@ class UsuariosProyectosModel extends Model
 
     public function getIdUsuarioAttribute() : Int {
         return (Int) $this->attributes[self::FIELD_ID_USUARIO];
+    }
+
+    public function getIdRolAttribute() : Int {
+        return (Int) $this->attributes[self::FIELD_ID_ROL];
     }
 
     public function getIdProyectoAttribute() : Int {
@@ -84,6 +89,10 @@ class UsuariosProyectosModel extends Model
         $this->attributes[self::FIELD_ID_USUARIO] = $value;
     }
 
+    public function setIdRolAttribute(Int $value) {
+        $this->attributes[self::FIELD_ID_ROL] = $value;
+    }
+
     public function setIdProyectoAttribute(Int $value) {
         $this->attributes[self::FIELD_ID_PROYECTO] = $value;
     }
@@ -106,4 +115,5 @@ class UsuariosProyectosModel extends Model
     public function usuarios() {
         return $this->hasMany(UsuariosModel::class, UsuariosModel::FIELD_ID, self::FIELD_ID_USUARIO);
     }
+
 }

@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 
-use App\Models\UsuariosModel;
 use App\Models\UsuariosProyectosModel;
-use App\Models\UsuariosProyectosRolesModel;
 use App\Models\RolesModel;
 
 class ProyectosModel extends Model
@@ -64,9 +62,9 @@ class ProyectosModel extends Model
     public function getParticipantesAttribute() : Collection {
         $id_proyecto = $this->attributes[self::FIELD_ID];
 
-        $participantes = UsuariosProyectosRolesModel::select(UsuariosProyectosRolesModel::FIELD_ID_USUARIO)
-            ->where(UsuariosProyectosRolesModel::FIELD_ID_ROL, RolesModel::ID_ROL_PARTICIPANTE)
-            ->where(UsuariosProyectosRolesModel::FIELD_ID_PROYECTO, $id_proyecto)
+        $participantes = UsuariosProyectosModel::select(UsuariosProyectosModel::FIELD_ID_USUARIO)
+            ->where(UsuariosProyectosModel::FIELD_ID_ROL, RolesModel::ID_ROL_PARTICIPANTE)
+            ->where(UsuariosProyectosModel::FIELD_ID_PROYECTO, $id_proyecto)
             ->get();
 
         return $participantes;
