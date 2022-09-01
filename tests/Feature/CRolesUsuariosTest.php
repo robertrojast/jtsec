@@ -7,10 +7,12 @@ use Tests\TestCase;
 use App\Models\RolesModel;
 use App\Models\UsuariosModel;
 use App\Models\ActividadesModel;
+use App\Models\IncidenciasModel;
 use App\Models\UsuariosProyectosModel;
 use App\Models\UsuariosActividadesModel;
+use App\Models\UsuariosIncidenciasModel;
 
-class RolesUsuariosTest extends TestCase
+class CRolesUsuariosTest extends TestCase
 {
     /**
      * Añade usuarios al proyecto 1 con diferentes roles.
@@ -89,7 +91,7 @@ class RolesUsuariosTest extends TestCase
 
                     break;
                 default:
-                    $id_rol = RolesModel::ID_ROL_PARTICIPANTE;
+                    $id_rol = RolesModel::ID_ROL_RESPONSABLE;
 
                     break;
             }
@@ -119,5 +121,41 @@ class RolesUsuariosTest extends TestCase
             // END - SI EL USUARIO ES "PARTICIPANTE" DENTRO DEL PROYECTO, SE LE PUEDE ASIGNAR LA ACTIVIDAD
         }
         // END - ASIGNAMOS CADA USUARIO A LA ÚLTIMA ACTIVIDAD CREADA
+    }
+
+    /**
+     * Añade usuarios a la última incidencia creada.
+     *
+     * @return void
+     */
+    public function test_asignacion_usuarios_a_ultima_incidencia()
+    {
+        $postFormUrl = route('nuevo-usuario-incidencia');
+
+        // Obtenemos la última incidencia creada
+        $incidencia    = IncidenciasModel::orderBy(IncidenciasModel::FIELD_ID, 'DESC')->first();
+        $id_incidencia = $incidencia->{ IncidenciasModel::FIELD_ID };
+
+        // Obtenemos el listado de usuarios creados
+        $usuarios = UsuariosModel::get();
+
+        // START - ASIGNAMOS TODOS LOS USUARIOS A LA INCIDENCIA
+        foreach($usuarios AS $usuario) {
+            $id_usuario = $usuario->{ UsuariosModel::FIELD_ID };
+
+            $this->call('POST', $postFormUrl, [
+                FORM_FIELD_ID_USUARIO    => $id_usuario,
+                FORM_FIELD_ID_INCIDENCIA => $id_incidencia,
+                '_token'                 => csrf_token()
+            ]);
+
+            // START - SI SE HA ASIGNADO LA INCIDENCIA AL USUARIO
+            $this->assertDatabaseHas(TABLA_USUARIOS_INCIDENCIAS, [
+                UsuariosIncidenciasModel::FIELD_ID_USUARIO    => $id_usuario,
+                UsuariosIncidenciasModel::FIELD_ID_INCIDENCIA => $id_incidencia,
+            ]);
+            // END - SI SE HA ASIGNADO LA INCIDENCIA AL USUARIO
+        }
+        // END - ASIGNAMOS TODOS LOS USUARIOS A LA INCIDENCIA
     }
 }

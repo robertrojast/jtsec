@@ -10,7 +10,7 @@ use App\Models\ActividadesModel;
 use App\Models\UsuariosProyectosModel;
 use App\Models\UsuariosActividadesModel;
 
-class ListadosTest extends TestCase
+class DListadosTest extends TestCase
 {
     /**
      * Añade usuarios al proyecto 1 con diferentes roles.
@@ -68,6 +68,34 @@ class ListadosTest extends TestCase
     public function test_listado_actividades_usuario_no_participante_en_proyecto()
     {
         $response          = $this->get(route('listado-actividades', [ 'id_usuario' => UsuariosModel::ID_USER_RESPONSABLE ]));
+        $actividades       = $response->decodeResponseJson();
+        $total_actividades = count($actividades);
+
+        // Comprobamos que la url se resuelve correctamente
+        $response->assertStatus(200);
+
+        // START - COMPROBAMOS QUE EL USUARIO PUEDA VER SUS ACTIVIDADES
+        if(!$total_actividades) {
+            $this->assertTrue(TRUE);
+        }
+        else {
+            $this->assertTrue(FALSE);
+        }
+        // END - COMPROBAMOS QUE EL USUARIO PUEDA VER SUS ACTIVIDADES
+    }
+
+    /**
+     * Listado de incidencias de un usuario "responsable" de la actividad .
+     *
+     * @return void
+     */
+    public function test_listado_incidencias_usuario_responsable_en_actividad()
+    {
+        $response = $this->get(route('listado-incidencias', [
+            'id_usuario'   => UsuariosModel::ID_USER_RESPONSABLE,
+            'id_actividad' => UsuariosModel::ID_USER_RESPONSABLE,
+        ]));
+
         $actividades       = $response->decodeResponseJson();
         $total_actividades = count($actividades);
 

@@ -6,7 +6,7 @@ use Tests\TestCase;
 
 use App\Models\ActividadesModel;
 
-class CrearActividadEnProyectoTest extends TestCase
+class ACrearActividadEnProyectoTest extends TestCase
 {
     /**
      * Añade nuevas actividades al proyecto 1

@@ -7,7 +7,7 @@ use Tests\TestCase;
 use App\Models\ActividadesModel;
 use App\Models\IncidenciasModel;
 
-class CrearIncidenciaEnUltimaActividadTest extends TestCase
+class BCrearIncidenciaEnUltimaActividadTest extends TestCase
 {
     /**
      * Añade nuevas incidencias a la última actividad creada

@@ -58,7 +58,7 @@
                 ->first();
 
             // START - SI NO ESTÁ ASIGNADO, LO AÑADIMOS
-            if($usuario_incidencia) {
+            if(!$usuario_incidencia) {
                 $usuario_incidencia = new UsuariosIncidenciasModel();
             }
             // END - SI NO ESTÁ ASIGNADO, LO AÑADIMOS
@@ -74,10 +74,10 @@
          *
          * @param Int $id_usuario
          * @param Int $id_actividad
-         * @return Collection
+         * @return Collection|null
          */
-        public static function ListadoIncidenciasUsuario(Int $id_usuario, Int $id_actividad) : Collection {
-            $incidencias = collect();
+        public static function ListadoIncidenciasUsuario(Int $id_usuario, Int $id_actividad) : ?Collection {
+            $incidencias = new Collection();
 
             // START - SI EL USUARIO ES RESPONSABLE DE LA ACTIVIDAD, PODRÁ CONSULTAR TODAS LAS INCIDENCIAS DE LA MISMA
             if(ActividadesRepository::usuarioEsResponsable($id_usuario, $id_actividad)) {
