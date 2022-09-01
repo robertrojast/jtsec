@@ -85,30 +85,66 @@ class DListadosTest extends TestCase
     }
 
     /**
-     * Listado de incidencias de un usuario "responsable" de la actividad .
+     * Listado de incidencias de un usuario "responsable" de la actividad (puede ver el listado).
      *
      * @return void
      */
-    public function test_listado_incidencias_usuario_responsable_en_actividad()
+    public function test_listado_incidencias_usuario_responsable_en_ultima_actividad()
     {
+        // Obtenemos la última actividad creada
+        $actividad    = ActividadesModel::orderBy(ActividadesModel::FIELD_ID, 'DESC')->first();
+        $id_actividad = $actividad->{ ActividadesModel::FIELD_ID };
+
         $response = $this->get(route('listado-incidencias', [
-            'id_usuario'   => UsuariosModel::ID_USER_RESPONSABLE,
-            'id_actividad' => UsuariosModel::ID_USER_RESPONSABLE,
+            'id_usuario'   => UsuariosModel::ID_USER_TODOS_LOS_ROLES,
+            'id_actividad' => $id_actividad,
         ]));
 
-        $actividades       = $response->decodeResponseJson();
-        $total_actividades = count($actividades);
+        $incidencias       = $response->decodeResponseJson();
+        $total_incidencias = count($incidencias);
 
         // Comprobamos que la url se resuelve correctamente
         $response->assertStatus(200);
 
-        // START - COMPROBAMOS QUE EL USUARIO PUEDA VER SUS ACTIVIDADES
-        if(!$total_actividades) {
+        // START - COMPROBAMOS QUE EL USUARIO PUEDA VER LAS INCIDENCIAS DE LA ACTIVIDAD
+        if($total_incidencias>0) {
             $this->assertTrue(TRUE);
         }
         else {
             $this->assertTrue(FALSE);
         }
-        // END - COMPROBAMOS QUE EL USUARIO PUEDA VER SUS ACTIVIDADES
+        // END - COMPROBAMOS QUE EL USUARIO PUEDA VER LAS INCIDENCIAS DE LA ACTIVIDAD
+    }
+
+    /**
+     * Listado de incidencias de un usuario que NO "responsable" de la actividad (no puede ver el listado).
+     *
+     * @return void
+     */
+    public function test_listado_incidencias_usuario_no_responsable_en_ultima_actividad()
+    {
+        // Obtenemos la última actividad creada
+        $actividad    = ActividadesModel::orderBy(ActividadesModel::FIELD_ID, 'DESC')->first();
+        $id_actividad = $actividad->{ ActividadesModel::FIELD_ID };
+
+        $response = $this->get(route('listado-incidencias', [
+            'id_usuario'   => UsuariosModel::ID_USER_PARTICIPANTE,
+            'id_actividad' => $id_actividad,
+        ]));
+
+        $incidencias       = $response->decodeResponseJson();
+        $total_incidencias = count($incidencias);
+
+        // Comprobamos que la url se resuelve correctamente
+        $response->assertStatus(200);
+
+        // START - COMPROBAMOS QUE EL USUARIO NO PUEDA VER LAS INCIDENCIAS DE LA ACTIVIDAD
+        if(!$total_incidencias) {
+            $this->assertTrue(TRUE);
+        }
+        else {
+            $this->assertTrue(FALSE);
+        }
+        // END - COMPROBAMOS QUE EL USUARIO NO PUEDA VER LAS INCIDENCIAS DE LA ACTIVIDAD
     }
 }
