@@ -3,6 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
+
+use App\Models\UsuariosModel;
+use App\Models\UsuariosProyectosModel;
+use App\Models\UsuariosProyectosRolesModel;
+use App\Models\RolesModel;
 
 class ProyectosModel extends Model
 {
@@ -25,10 +31,20 @@ class ProyectosModel extends Model
     |
     */
 
-    const FIELD_ID         = 'id';
-    const FIELD_NOMBRE     = 'nombre';
-    const FIELD_CREATED_AT = 'created_at';
-    const FIELD_UPDATED_AT = 'updated_at';
+    const FIELD_ID            = 'id';
+    const FIELD_NOMBRE        = 'nombre';
+    const FIELD_PARTICIPANTES = 'participantes';
+    const FIELD_CREATED_AT    = 'created_at';
+    const FIELD_UPDATED_AT    = 'updated_at';
+
+    /*
+    |--------------------------------------------------------------------------
+    | TABLES RELATIONSHIPS NAMES
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    const FIELD_RELATIONSHIP_USUARIOS = 'usuarios';
 
     /*
     |--------------------------------------------------------------------------
@@ -43,6 +59,17 @@ class ProyectosModel extends Model
 
     public function getNombreAttribute() : String {
         return (String) $this->attributes[self::FIELD_NOMBRE];
+    }
+
+    public function getParticipantesAttribute() : Collection {
+        $id_proyecto = $this->attributes[self::FIELD_ID];
+
+        $participantes = UsuariosProyectosRolesModel::select(UsuariosProyectosRolesModel::FIELD_ID_USUARIO)
+            ->where(UsuariosProyectosRolesModel::FIELD_ID_ROL, RolesModel::ID_ROL_PARTICIPANTE)
+            ->where(UsuariosProyectosRolesModel::FIELD_ID_PROYECTO, $id_proyecto)
+            ->get();
+
+        return $participantes;
     }
 
     public function getCreatedAtAttribute() : String {
@@ -74,6 +101,17 @@ class ProyectosModel extends Model
 
     public function setUpdatedAtAttribute(String $value) {
         $this->attributes[self::FIELD_UPDATED_AT] = $value;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONSHIPS
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    public function usuarios() {
+        return $this->hasMany(UsuariosProyectosModel::class, UsuariosProyectosModel::FIELD_ID_PROYECTO, self::FIELD_ID);
     }
 
 }

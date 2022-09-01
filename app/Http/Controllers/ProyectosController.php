@@ -35,8 +35,26 @@ class ProyectosController extends Controller {
         }
     }
 
-    public static function ListadoParticipantes(Int $id_proyecto) {
+    /**
+     * Obtiene el listado de participantes del proyecto especificado
+     *
+     * @param Int $id_proyecto
+     * @return object
+     */
+    public static function ListadoParticipantesProyecto(Int $id_proyecto) : object {
+        try{
+            $participantes_proyecto = ProyectosRepository::ListadoParticipantesProyecto($id_proyecto);
 
+            return HelperResponse::JsonRequestFromCollection($participantes_proyecto);
+        }
+        catch(QueryException $e) {
+            return HelperResponse::JsonRequestStatus(FALSE, __('master.logOperationError'), $e->getMessage());
+        }
+        catch(Exception $e) {
+            $errorMessage = $e->getFile()." (line ".$e->getLine()."): ".$e->getMessage();
+
+            return HelperResponse::JsonRequestStatus(FALSE, __('master.logOperationError'), $errorMessage);
+        }
     }
 
 }

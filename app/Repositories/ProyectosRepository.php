@@ -5,7 +5,9 @@
     use App\Repositories\Repository;
 
     use Illuminate\Support\Facades\DB;
+    use Illuminate\Database\Eloquent\Collection;
 
+    use App\Models\ProyectosModel;
     use App\Models\UsuariosProyectosModel;
     use App\Models\UsuariosProyectosRolesModel;
     use App\Models\RolesModel;
@@ -97,7 +99,7 @@
 
         /**
          * Comprueba si el usuario en cuestión tiene el rol "participante" asignado en el proyecto
-         * 
+         *
          * @param Int $id_usuario
          * @param Int $id_proyecto
          * @return Bool
@@ -109,5 +111,18 @@
                 ->count();
 
             return (Bool) $es_participante;
+        }
+
+        /**
+         * Obtiene el listado de participantes del proyecto especificado
+         *
+         * @param Int $id_proyecto
+         * @return Collection       Retorna los ids de los usuarios participantes.
+         */
+        public static function ListadoParticipantesProyecto(Int $id_proyecto) : Collection {
+            $proyecto      = ProyectosModel::where(ProyectosModel::FIELD_ID, $id_proyecto)->first();
+            $participantes = $proyecto->{ ProyectosModel::FIELD_PARTICIPANTES };
+
+            return $participantes;
         }
     }
