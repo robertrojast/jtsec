@@ -91,9 +91,7 @@
          */
         public static function ListadoActividadesUsuario(Int $id_usuario) : Collection {
             $usuario             = UsuariosModel::where(UsuariosModel::FIELD_ID, $id_usuario)->first();
-
-            $usuario_actividades = $usuario->{ UsuariosModel::FIELD_RELATIONSHIP_ACTIVIDADES }
-                ->{ UsuariosActividadesModel::FIELD_RELATIONSHIP_ACTIVIDADES };
+            $usuario_actividades = $usuario->{ UsuariosModel::FIELD_RELATIONSHIP_ACTIVIDADES };
 
             return $usuario_actividades;
         }
