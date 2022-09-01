@@ -23,5 +23,5 @@ Route::post('nuevo-usuario-actividad', [ActividadesController::class, 'NuevoUsua
 Route::post('nuevo-usuario-incidencia', [IncidenciasController::class, 'NuevoUsuarioIncidencia'])->name('nuevo-usuario-incidencia');
 
 Route::get('listado-actividades/{id_usuario}', [ActividadesController::class, 'ListadoActividades'])->name('listado-actividades');
-Route::get('listado-incidencias/{id_usuario}', [IncidenciasController::class, 'ListadoIncidencias'])->name('listado-incidencias');
+Route::get('listado-incidencias-usuario/{id_usuario}/{id_actividad}', [IncidenciasController::class, 'ListadoIncidenciasUsuario'])->name('listado-incidencias');
 Route::get('listado-participantes-proyecto/{id_proyecto}', [ProyectosController::class, 'ListadoParticipantesProyecto'])->name('listado-participantes-proyecto');

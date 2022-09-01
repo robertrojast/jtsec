@@ -3,9 +3,13 @@
     namespace App\Repositories;
 
     use App\Repositories\Repository;
+    use Illuminate\Database\Eloquent\Collection;
 
     use App\Models\IncidenciasModel;
+    use App\Models\UsuariosActividadesModel;
     use App\Models\UsuariosIncidenciasModel;
+
+    use App\Repositories\ActividadesRepository;
 
     class IncidenciasRepository extends Repository {
 
@@ -63,5 +67,24 @@
             $usuario_incidencia->{ UsuariosIncidenciasModel::FIELD_ID_INCIDENCIA } = $id_incidencia;
 
             return $usuario_incidencia->save();
+        }
+
+        /**
+         * Obtiene el listado de todas las incidencias de la actividad especificada (si el usuario tiene rol "responsable" en la misma).
+         *
+         * @param Int $id_usuario
+         * @param Int $id_actividad
+         * @return Collection
+         */
+        public static function ListadoIncidenciasUsuario(Int $id_usuario, Int $id_actividad) : Collection {
+            $incidencias = collect();
+
+            // START - SI EL USUARIO ES RESPONSABLE DE LA ACTIVIDAD, PODRÁ CONSULTAR TODAS LAS INCIDENCIAS DE LA MISMA
+            if(ActividadesRepository::usuarioEsResponsable($id_usuario, $id_actividad)) {
+                $incidencias = IncidenciasModel::where(IncidenciasModel::FIELD_ID_ACTIVIDAD, $id_actividad)->get();
+            }
+            // END - SI EL USUARIO ES RESPONSABLE DE LA ACTIVIDAD, PODRÁ CONSULTAR TODAS LAS INCIDENCIAS DE LA MISMA
+
+            return $incidencias;
         }
     }

@@ -8,6 +8,7 @@
     use App\Models\UsuariosModel;
     use App\Models\ActividadesModel;
     use App\Models\UsuariosActividadesModel;
+    use App\Models\RolesModel;
 
     use App\Repositories\ProyectosRepository;
 
@@ -95,5 +96,21 @@
                 ->{ UsuariosActividadesModel::FIELD_RELATIONSHIP_ACTIVIDADES };
 
             return $usuario_actividades;
+        }
+
+        /**
+         * Comprueba si el usuario en cuestión es resposable de la actividad especificada.
+         *
+         * @param Int $id_usuario
+         * @param Int $id_actividad
+         * @return Bool
+         */
+        public static function usuarioEsResponsable(Int $id_usuario, Int $id_actividad) : Bool {
+            $es_reponsable = UsuariosActividadesModel::where(UsuariosActividadesModel::FIELD_ID_USUARIO, $id_usuario)
+                ->where(UsuariosActividadesModel::FIELD_ID_ACTIVIDAD, $id_actividad)
+                ->where(UsuariosActividadesModel::FIELD_ID_ROL, RolesModel::ID_ROL_RESPONSABLE)
+                ->count();
+
+            return (Bool) $es_reponsable;
         }
     }

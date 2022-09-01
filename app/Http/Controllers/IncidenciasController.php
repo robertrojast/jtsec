@@ -58,8 +58,27 @@ class IncidenciasController extends Controller {
         }
     }
 
-    public function ListadoIncidencias(Int $id_usuario) {
+    /**
+     * Obtiene el listado de todas las incidencias de la actividad especificada (si el usuario tiene rol "responsable" en la misma).
+     *
+     * @param Int $id_usuario
+     * @param Int $id_actividad
+     * @return object
+     */
+    public function ListadoIncidenciasUsuario(Int $id_usuario, Int $id_actividad) : object {
+        try{
+            $incidencias = IncidenciasRepository::ListadoIncidenciasUsuario($id_usuario, $id_actividad);
 
+            return HelperResponse::JsonRequestFromCollection($incidencias);
+        }
+        catch(QueryException $e) {
+            return HelperResponse::JsonRequestStatus(FALSE, __('master.logOperationError'), $e->getMessage());
+        }
+        catch(Exception $e) {
+            $errorMessage = $e->getFile()." (line ".$e->getLine()."): ".$e->getMessage();
+
+            return HelperResponse::JsonRequestStatus(FALSE, __('master.logOperationError'), $errorMessage);
+        }
     }
 
 }
